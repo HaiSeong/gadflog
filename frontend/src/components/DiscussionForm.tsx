@@ -5,6 +5,7 @@ import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {toast} from "@/hooks/use-toast";
 import LoadingSpinner from './LoadingSpinner';
+import {DiscussionRequest} from "@/types";
 
 interface DiscussionFormProps {
     onSubmitSuccess: () => void;
@@ -14,7 +15,6 @@ export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess})
     const [isExpanded, setIsExpanded] = useState(false);
     const [content, setContent] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [resultMessage, setResultMessage] = useState("");
 
     const handleSubmit = async () => {
         if (!content.trim()) {
@@ -27,13 +27,15 @@ export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess})
 
         setIsLoading(true);
 
+        const requset: DiscussionRequest = {
+            content: content,
+        }
         try {
-            const data = await submitDiscussion(content);
+            const data = await submitDiscussion(requset);
             toast({
                 title: "질문 등록 완료",
                 description: "질문이 성공적으로 등록되었습니다.",
             });
-            setResultMessage(data.message); // 결과 메시지 저장
             setContent("");
             setIsExpanded(false);
             onSubmitSuccess();
@@ -43,7 +45,6 @@ export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess})
                 title: "질문 등록 실패",
                 description: "질문 등록에 실패했습니다.",
             });
-            setResultMessage(""); // 실패 시 초기화
         } finally {
             setIsLoading(false);
         }
@@ -87,11 +88,6 @@ export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess})
                 )}
             </div>
             {isLoading && <LoadingSpinner/>}
-            {resultMessage && (
-                <div className="mt-4 p-4 bg-green-100 border border-green-300 text-green-700 rounded">
-                    {resultMessage}
-                </div>
-            )}
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import {Discussion} from "@/types";
+import {Discussion, DiscussionRequest} from "@/types";
 
 export const getDiscussions = async (): Promise<Discussion[]> => {
     const response = await fetch('/discussions', {
@@ -15,13 +15,13 @@ export const getDiscussions = async (): Promise<Discussion[]> => {
     return response.json();
 };
 
-export const submitDiscussion = async (content: string) => {
+export const submitDiscussion = async (request: DiscussionRequest): Promise<Discussion> => {
     const response = await fetch('/discussions', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({content}),
+        body: JSON.stringify(request),
     });
 
     if (!response.ok) {

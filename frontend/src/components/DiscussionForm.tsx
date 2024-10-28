@@ -1,12 +1,16 @@
 import {useState} from 'react';
-import {submitDiscussion} from '@/api/submitDiscussion';
+import {submitDiscussion} from '@/api/discussions';
 import {Label} from "@/components/ui/label";
 import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {toast} from "@/hooks/use-toast";
 import LoadingSpinner from './LoadingSpinner';
 
-export const DiscussionForm: React.FC = () => {
+interface DiscussionFormProps {
+    onSubmitSuccess: () => void;
+}
+
+export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess}) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [content, setContent] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +36,7 @@ export const DiscussionForm: React.FC = () => {
             setResultMessage(data.message); // 결과 메시지 저장
             setContent("");
             setIsExpanded(false);
+            onSubmitSuccess();
         } catch (error) {
             console.error("Error:", error);
             toast({

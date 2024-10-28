@@ -17,7 +17,7 @@ public class DiscussionService {
 
     @Transactional(readOnly = true)
     public List<DiscussionResponse> getDiscussions() {
-        return discussionRepository.findAll().stream()
+        return discussionRepository.findAllByOrderByCreatedAtDesc().stream()
                 .filter(Discussion::isActive)
                 .map(DiscussionResponse::from)
                 .toList();

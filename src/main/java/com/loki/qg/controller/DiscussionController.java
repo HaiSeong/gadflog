@@ -29,6 +29,7 @@ public class DiscussionController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public DiscussionResponse createDiscussion(@RequestBody DiscussionRequest discussionRequest) {
         return discussionService.createDiscussion(discussionRequest);
     }

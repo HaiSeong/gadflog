@@ -31,7 +31,7 @@ export const submitDiscussion = async (request: DiscussionRequest): Promise<Disc
     return response.json();
 };
 
-export const updateDiscussion = async (id: string, request: DiscussionRequest) => {
+export const updateDiscussion = async (id: number, request: DiscussionRequest) => {
     const response = await fetch(`/discussions/${id}`, {
         method: 'PUT',
         headers: {
@@ -47,7 +47,7 @@ export const updateDiscussion = async (id: string, request: DiscussionRequest) =
     return response.json();
 };
 
-export const deleteDiscussion = async (id: string) => {
+export const deleteDiscussion = async (id: number) => {
     const response = await fetch(`/discussions/${id}`, {
         method: 'DELETE',
         headers: {
@@ -58,6 +58,4 @@ export const deleteDiscussion = async (id: string) => {
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }
-
-    return response.json();
 };

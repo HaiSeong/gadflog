@@ -18,6 +18,7 @@ public class DiscussionService {
     @Transactional(readOnly = true)
     public List<DiscussionResponse> getDiscussions() {
         return discussionRepository.findAll().stream()
+                .filter(Discussion::isActive)
                 .map(DiscussionResponse::from)
                 .toList();
     }
@@ -37,5 +38,13 @@ public class DiscussionService {
         discussion.updateContent(discussionRequest.content());
 
         return DiscussionResponse.from(discussion);
+    }
+
+    @Transactional
+    public void deleteDiscussion(Long id) {
+        Discussion discussion = discussionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 디스커션 입니다."));
+
+        discussion.delete();
     }
 }

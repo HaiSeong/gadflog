@@ -1,4 +1,3 @@
-// components/discussion/DiscussionList.tsx
 import {Discussion} from '@/types';
 import {Accordion} from "@/components/ui/accordion";
 import {useState} from 'react';
@@ -6,6 +5,7 @@ import {deleteDiscussion, updateDiscussion} from '@/api/discussions';
 import {toast} from "@/hooks/use-toast";
 import {DiscussionListItem} from './DiscussionListItem';
 import {DiscussionEditDialog} from './DiscussionEditDialog';
+import {DiscussionDeleteAlert} from './DiscussionDeleteAlert';
 
 interface DiscussionListProps {
     discussions: Discussion[];
@@ -15,9 +15,10 @@ interface DiscussionListProps {
 export const DiscussionList: React.FC<DiscussionListProps> = ({discussions, onUpdate}) => {
     const [openItem, setOpenItem] = useState<string | undefined>();
     const [isLoading, setIsLoading] = useState(false);
-    const [editDialog, setEditDialog] = useState({isOpen: false, id: '', content: ''});
+    const [editDialog, setEditDialog] = useState({isOpen: false, id: 0, content: ''});
+    const [deleteAlert, setDeleteAlert] = useState({isOpen: false, id: 0});
 
-    const handleDelete = async (id: string) => {
+    const handleDelete = async (id: number) => {
         try {
             setIsLoading(true);
             await deleteDiscussion(id);
@@ -25,6 +26,7 @@ export const DiscussionList: React.FC<DiscussionListProps> = ({discussions, onUp
                 title: "삭제 완료",
                 description: "질문이 삭제되었습니다.",
             });
+            setDeleteAlert({isOpen: false, id: 0});
             onUpdate();
         } catch (error) {
             console.error("Delete Error:", error);
@@ -47,7 +49,7 @@ export const DiscussionList: React.FC<DiscussionListProps> = ({discussions, onUp
                 title: "수정 완료",
                 description: "질문이 수정되었습니다.",
             });
-            setEditDialog({isOpen: false, id: '', content: ''});
+            setEditDialog({isOpen: false, id: 0, content: ''});
             onUpdate();
         } catch (error) {
             console.error("Update Error:", error);
@@ -78,9 +80,9 @@ export const DiscussionList: React.FC<DiscussionListProps> = ({discussions, onUp
                                 key={discussion.id}
                                 discussion={discussion}
                                 isLoading={isLoading}
-                                isOpen={openItem === discussion.id}
+                                isOpen={openItem === String(discussion.id)}
                                 onEdit={(id, content) => setEditDialog({isOpen: true, id, content})}
-                                onDelete={handleDelete}
+                                onDelete={(id) => setDeleteAlert({isOpen: true, id})}
                             />
                         ))}
                     </Accordion>
@@ -91,9 +93,16 @@ export const DiscussionList: React.FC<DiscussionListProps> = ({discussions, onUp
                 isOpen={editDialog.isOpen}
                 content={editDialog.content}
                 isLoading={isLoading}
-                onClose={() => setEditDialog({isOpen: false, id: '', content: ''})}
+                onClose={() => setEditDialog({isOpen: false, id: 0, content: ''})}
                 onChange={(content) => setEditDialog(prev => ({...prev, content}))}
                 onSubmit={handleEdit}
+            />
+
+            <DiscussionDeleteAlert
+                isOpen={deleteAlert.isOpen}
+                isLoading={isLoading}
+                onClose={() => setDeleteAlert({isOpen: false, id: 0})}
+                onConfirm={() => handleDelete(deleteAlert.id)}
             />
         </>
     );

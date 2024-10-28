@@ -1,5 +1,5 @@
 export interface Discussion {
-    id: string;
+    id: number;
     content: string;
 }
 

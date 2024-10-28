@@ -6,8 +6,8 @@ interface DiscussionListItemProps {
     discussion: Discussion;
     isLoading: boolean;
     isOpen: boolean;
-    onEdit: (id: string, content: string) => void;
-    onDelete: (id: string) => void;
+    onEdit: (id: number, content: string) => void;
+    onDelete: (id: number) => void;
 }
 
 export const DiscussionListItem: React.FC<DiscussionListItemProps> = (
@@ -15,7 +15,7 @@ export const DiscussionListItem: React.FC<DiscussionListItemProps> = (
     return (
         <AccordionItem
             key={discussion.id}
-            value={discussion.id}
+            value={String(discussion.id)}
             className="border rounded-lg bg-white px-4"
         >
             <AccordionTrigger className="hover:no-underline">

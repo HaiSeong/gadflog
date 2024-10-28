@@ -43,7 +43,7 @@ export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess})
             console.error("Error:", error);
             toast({
                 title: "질문 등록 실패",
-                description: "질문 등록에 실패했습니다.",
+                description: <span className="text-red-500">질문 등록에 실패했습니다.</span>,
             });
         } finally {
             setIsLoading(false);

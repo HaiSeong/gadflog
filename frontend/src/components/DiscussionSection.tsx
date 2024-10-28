@@ -28,7 +28,10 @@ export const DiscussionSection: React.FC = () => {
     return (
         <div className="space-y-8">
             <DiscussionForm onSubmitSuccess={fetchDiscussions}/>
-            <DiscussionList discussions={discussions}/>
+            <DiscussionList
+                discussions={discussions}
+                onUpdate={fetchDiscussions}
+            />
         </div>
     );
 };

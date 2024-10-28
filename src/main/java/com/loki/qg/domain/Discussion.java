@@ -24,4 +24,8 @@ public class Discussion {
     public Discussion(String content) {
         this(0L, content);
     }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }

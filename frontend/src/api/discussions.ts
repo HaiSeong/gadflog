@@ -1,7 +1,7 @@
 import {Discussion, DiscussionRequest} from "@/types";
 
 export const getDiscussions = async (): Promise<Discussion[]> => {
-    const response = await fetch('/discussions', {
+    const response = await fetch(`${process.env.API_BASE_URL}/discussions`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -16,7 +16,7 @@ export const getDiscussions = async (): Promise<Discussion[]> => {
 };
 
 export const submitDiscussion = async (request: DiscussionRequest): Promise<Discussion> => {
-    const response = await fetch('/discussions', {
+    const response = await fetch(`${process.env.API_BASE_URL}/discussions`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export const submitDiscussion = async (request: DiscussionRequest): Promise<Disc
 };
 
 export const updateDiscussion = async (id: number, request: DiscussionRequest) => {
-    const response = await fetch(`/discussions/${id}`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/discussions/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export const updateDiscussion = async (id: number, request: DiscussionRequest) =
 };
 
 export const deleteDiscussion = async (id: number) => {
-    const response = await fetch(`/discussions/${id}`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/discussions/${id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

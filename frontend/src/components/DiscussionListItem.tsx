@@ -20,27 +20,32 @@ export default function DiscussionListItem({discussion, isOpen}: DiscussionListI
             className="border rounded-lg bg-white px-4"
         >
             <AccordionTrigger className="hover:no-underline">
-                <div className="flex flex-col items-start text-left w-full">
-                    <p className={`line-clamp-1 transition-colors duration-100 ${
-                        isOpen ? 'text-gray-200' : 'text-gray-800'
+                <div className="flex flex-col items-start text-left w-full gap-1">
+                    <h3 className={`font-medium transition-colors duration-100 ${
+                        isOpen ? 'text-gray-200' : 'text-gray-900'
                     }`}>
-                        {discussion.content}
-                    </p>
+                        {discussion.title}
+                    </h3>
                 </div>
             </AccordionTrigger>
             <AccordionContent>
-                <div className="pt-1 pb-1">
-                    <p className="text-2xl text-gray-800 whitespace-pre-wrap mb-6">
-                        {discussion.content}
-                    </p>
-                    <div className="flex justify-end">
+                <div className="pt-4 pb-2 space-y-4">
+                    <div className="space-y-2">
+                        <h2 className="text-xl font-semibold text-gray-900">
+                            {discussion.title}
+                        </h2>
+                        <p className="text-gray-800 whitespace-pre-wrap">
+                            {discussion.content}
+                        </p>
+                    </div>
+                    <div className="flex justify-end pt-2">
                         <Button
                             onClick={() => router.push(`/discussions/${discussion.id}`)}
                             variant="ghost"
                             className="flex items-center space-x-1 text-gray-600 hover:text-gray-900"
                         >
                             <span>더보기</span>
-                            <ArrowRight className="w-4 h-4"/>
+                            <ArrowRight className="w-4 h-4 ml-1"/>
                         </Button>
                     </div>
                 </div>

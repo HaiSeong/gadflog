@@ -43,7 +43,7 @@ public class DiscussionService {
         Discussion discussion = discussionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 디스커션 입니다."));
 
-        discussion.updateContent(discussionRequest.content());
+        discussion.update(discussionRequest.title(), discussionRequest.content());
 
         return DiscussionResponse.from(discussion);
     }

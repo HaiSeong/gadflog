@@ -14,7 +14,7 @@ export default function DiscussionList({discussions}: DiscussionListProps) {
 
     return (
         <div>
-            <h2 className="text-xl font-semibold mb-4">나의 질문 목록</h2>
+            <h2 className="text-xl font-semibold mb-4">나의 질문들</h2>
             {discussions.length === 0 ? (
                 <p className="text-gray-500 text-center py-8">아직 작성된 질문이 없습니다.</p>
             ) : (

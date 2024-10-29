@@ -28,6 +28,8 @@ public class Discussion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title;
+
     private String content;
 
     @Enumerated(EnumType.STRING)
@@ -39,11 +41,12 @@ public class Discussion {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Discussion(String content) {
-        this(0L, content, DiscussionStatus.ACTIVE, null, null);
+    public Discussion(String title, String content) {
+        this(0L, title, content, DiscussionStatus.ACTIVE, null, null);
     }
 
-    public void updateContent(String content) {
+    public void update(String title, String content) {
+        this.title = title;
         this.content = content;
     }
 

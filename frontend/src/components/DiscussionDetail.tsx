@@ -20,7 +20,11 @@ export default function DiscussionDetail() {
     const [discussion, setDiscussion] = useState<Discussion | null>(null);
     const [isLeaving, setIsLeaving] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [editDialog, setEditDialog] = useState({isOpen: false, content: ''});
+    const [editDialog, setEditDialog] = useState({
+        isOpen: false,
+        title: '',
+        content: ''
+    });
     const [deleteAlert, setDeleteAlert] = useState({isOpen: false});
 
     useEffect(() => {
@@ -41,17 +45,24 @@ export default function DiscussionDetail() {
     };
 
     const handleEdit = async () => {
-        if (!editDialog.content.trim() || !discussion) return;
+        if (!editDialog.title.trim() || !editDialog.content.trim() || !discussion) return;
 
         try {
             setIsLoading(true);
-            await updateDiscussion(discussion.id, {content: editDialog.content});
+            await updateDiscussion(discussion.id, {
+                title: editDialog.title,
+                content: editDialog.content
+            });
             toast({
                 title: "수정 완료",
                 description: "질문이 수정되었습니다.",
             });
-            setEditDialog({isOpen: false, content: ''});
-            setDiscussion(prev => prev ? {...prev, content: editDialog.content} : null);
+            setEditDialog({isOpen: false, title: '', content: ''});
+            setDiscussion(prev => prev ? {
+                ...prev,
+                title: editDialog.title,
+                content: editDialog.content
+            } : null);
         } catch (error) {
             console.error("Update Error:", error);
             toast({
@@ -100,7 +111,11 @@ export default function DiscussionDetail() {
                     <ChevronLeftIcon className="h-4 w-4"/>
                 </Button>
                 <DiscussionDetailMenu
-                    onEdit={() => setEditDialog({isOpen: true, content: discussion.content})}
+                    onEdit={() => setEditDialog({
+                        isOpen: true,
+                        title: discussion.title,
+                        content: discussion.content
+                    })}
                     onDelete={() => setDeleteAlert({isOpen: true})}
                     disabled={isLoading}
                 />
@@ -118,17 +133,22 @@ export default function DiscussionDetail() {
                         updatedAt={discussion.updatedAt}
                     />
                 </div>
-                <p className="text-2xl text-gray-800 whitespace-pre-wrap">
+                <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                    {discussion.title}
+                </h1>
+                <p className="text-lg text-gray-800 whitespace-pre-wrap">
                     {discussion.content}
                 </p>
             </div>
 
             <DiscussionEditDialog
                 isOpen={editDialog.isOpen}
+                title={editDialog.title}
                 content={editDialog.content}
                 isLoading={isLoading}
-                onClose={() => setEditDialog({isOpen: false, content: ''})}
-                onChange={(content) => setEditDialog(prev => ({...prev, content}))}
+                onClose={() => setEditDialog({isOpen: false, title: '', content: ''})}
+                onChangeTitle={(title) => setEditDialog(prev => ({...prev, title}))}
+                onChangeContent={(content) => setEditDialog(prev => ({...prev, content}))}
                 onSubmit={handleEdit}
             />
 

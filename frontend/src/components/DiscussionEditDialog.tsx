@@ -1,53 +1,48 @@
-'use client'
-
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog";
-import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
+import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,} from "@/components/ui/dialog";
+import {DiscussionContentTextarea} from "@/components/DiscussionContentTextarea";
+import {DiscussionTitleInput} from "@/components/DiscussionTitleInput";
 
 interface DiscussionEditDialogProps {
     isOpen: boolean;
+    title: string;
     content: string;
     isLoading: boolean;
     onClose: () => void;
-    onChange: (content: string) => void;
+    onChangeTitle: (value: string) => void;
+    onChangeContent: (value: string) => void;
     onSubmit: () => void;
 }
 
-export const DiscussionEditDialog: React.FC<DiscussionEditDialogProps> = (
-    {isOpen, content, isLoading, onClose, onChange, onSubmit}) => {
+export function DiscussionEditDialog({
+                                         isOpen, title, content, isLoading, onClose, onChangeTitle, onChangeContent, onSubmit
+                                     }: DiscussionEditDialogProps) {
     return (
-        <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <DialogContent>
+        <Dialog open={isOpen} onOpenChange={onClose}>
+            <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>질문 수정하기</DialogTitle>
-                    <DialogDescription>
-                        아래 입력창에서 질문 내용을 수정할 수 있습니다.
-                    </DialogDescription>
+                    <DialogTitle>질문 수정</DialogTitle>
                 </DialogHeader>
-                <div className="py-4">
-                    <Textarea
-                        placeholder="궁금한 내용을 적어보아요."
+                <div className="grid gap-4 py-4">
+                    <DiscussionTitleInput
+                        value={title}
+                        onChange={onChangeTitle}
+                    />
+                    <DiscussionContentTextarea
                         value={content}
-                        onChange={(e) => onChange(e.target.value)}
-                        className="min-h-[100px]"
+                        onChange={onChangeContent}
+                        minHeight={200}
                     />
                 </div>
-                <div className="flex justify-end space-x-2">
-                    <Button
-                        variant="outline"
-                        onClick={onClose}
-                        disabled={isLoading}
-                    >
+                <DialogFooter>
+                    <Button onClick={onClose} variant="outline">
                         취소
                     </Button>
-                    <Button
-                        onClick={onSubmit}
-                        disabled={isLoading || !content.trim()}
-                    >
-                        수정하기
+                    <Button onClick={onSubmit} disabled={isLoading || !title.trim() || !content.trim()}>
+                        수정
                     </Button>
-                </div>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );
-};
+}

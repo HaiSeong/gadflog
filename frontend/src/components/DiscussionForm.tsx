@@ -1,13 +1,12 @@
 'use client'
 
 import {useState} from 'react';
-import {submitDiscussion} from '@/api/discussions';
-import {Label} from "@/components/ui/label";
-import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
+import LoadingSpinner from '@/components/LoadingSpinner';
 import {toast} from "@/hooks/use-toast";
-import LoadingSpinner from './LoadingSpinner';
-import {DiscussionRequest} from "@/types";
+import {submitDiscussion} from "@/api/discussions";
+import {DiscussionTitleInput} from "@/components/DiscussionTitleInput";
+import {DiscussionContentTextarea} from "@/components/DiscussionContentTextarea";
 
 interface DiscussionFormProps {
     onSubmitSuccess: () => void;
@@ -15,11 +14,22 @@ interface DiscussionFormProps {
 
 export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess}) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const [content, setContent] = useState("");
+    const [formData, setFormData] = useState({
+        title: "",
+        content: ""
+    });
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async () => {
-        if (!content.trim()) {
+        if (!formData.title.trim()) {
+            toast({
+                title: "입력 오류",
+                description: "제목을 입력해주세요.",
+            });
+            return;
+        }
+
+        if (isExpanded && !formData.content.trim()) {
             toast({
                 title: "입력 오류",
                 description: "내용을 입력해주세요.",
@@ -29,16 +39,18 @@ export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess})
 
         setIsLoading(true);
 
-        const requset: DiscussionRequest = {
-            content: content,
+        const request = {
+            title: formData.title.trim(),
+            content: formData.content.trim() || formData.title.trim(),
         }
+
         try {
-            const data = await submitDiscussion(requset);
+            await submitDiscussion(request);
             toast({
                 title: "질문 등록 완료",
                 description: "질문이 성공적으로 등록되었습니다.",
             });
-            setContent("");
+            setFormData({title: "", content: ""});
             setIsExpanded(false);
             onSubmitSuccess();
         } catch (error) {
@@ -52,29 +64,33 @@ export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess})
         }
     };
 
+    const handleCancel = () => {
+        setIsExpanded(false);
+        setFormData({title: "", content: ""});
+    };
+
     return (
         <div className="relative grid w-full gap-1.5">
-            <div className={`transition-opacity duration-300 ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
-                <Label htmlFor="message" className="text-base">
-                    새로운 질문이 있나요?
-                </Label>
-                <Textarea
-                    placeholder="궁금한 내용을 적어보아요."
-                    id="message"
-                    value={content}
-                    className={`transition-all duration-300 ${isExpanded ? 'h-32' : 'h-12'}`}
+            <h2 className="text-xl font-semibold mb-4">질문하기</h2>
+            <div className={`transition-all duration-300 ease-in-out ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
+                <DiscussionTitleInput
+                    value={formData.title}
+                    onChange={(title) => setFormData(prev => ({...prev, title}))}
                     onClick={() => setIsExpanded(true)}
-                    onChange={(e) => setContent(e.target.value)}
+                    className="mb-2"
                 />
-                <div className="h-1"/>
-                {isExpanded && (
+                <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                }`}>
+                    <DiscussionContentTextarea
+                        value={formData.content}
+                        onChange={(content) => setFormData(prev => ({...prev, content}))}
+                    />
+                    <div className="h-4"/>
                     <div className="flex justify-end space-x-2">
                         <Button
                             variant="outline"
-                            onClick={() => {
-                                setIsExpanded(false);
-                                setContent("");
-                            }}
+                            onClick={handleCancel}
                             disabled={isLoading}
                         >
                             취소
@@ -82,12 +98,12 @@ export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess})
                         <Button
                             className="bg-black text-white border border-black"
                             onClick={handleSubmit}
-                            disabled={isLoading || !content.trim()}
+                            disabled={isLoading || !formData.title.trim() || (isExpanded && !formData.content.trim())}
                         >
                             작성
                         </Button>
                     </div>
-                )}
+                </div>
             </div>
             {isLoading && <LoadingSpinner/>}
         </div>

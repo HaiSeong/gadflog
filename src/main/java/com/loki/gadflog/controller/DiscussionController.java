@@ -3,6 +3,7 @@ package com.loki.gadflog.controller;
 import com.loki.gadflog.dto.DiscussionRequest;
 import com.loki.gadflog.dto.DiscussionResponse;
 import com.loki.gadflog.service.DiscussionService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,13 +36,13 @@ public class DiscussionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public DiscussionResponse createDiscussion(@RequestBody DiscussionRequest discussionRequest) {
+    public DiscussionResponse createDiscussion(@RequestBody @Valid DiscussionRequest discussionRequest) {
         return discussionService.createDiscussion(discussionRequest);
     }
 
     @PutMapping("/{id}")
     public DiscussionResponse updateDiscussion(@PathVariable Long id,
-                                               @RequestBody DiscussionRequest discussionRequest) {
+                                               @RequestBody @Valid DiscussionRequest discussionRequest) {
         return discussionService.updateDiscussion(id, discussionRequest);
     }
 

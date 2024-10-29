@@ -1,3 +1,5 @@
+'use client'
+
 import {Discussion} from '@/types';
 import {Accordion} from "@/components/ui/accordion";
 import {useState} from 'react';

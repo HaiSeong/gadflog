@@ -1,4 +1,4 @@
-package com.loki.qg.domain;
+package com.loki.gadflog.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;

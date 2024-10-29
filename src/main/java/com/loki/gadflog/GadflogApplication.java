@@ -1,13 +1,13 @@
-package com.loki.qg;
+package com.loki.gadflog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class QuestionGraphApplication {
+public class GadflogApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(QuestionGraphApplication.class, args);
+        SpringApplication.run(GadflogApplication.class, args);
     }
 
 }

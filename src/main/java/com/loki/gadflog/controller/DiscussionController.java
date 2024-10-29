@@ -1,8 +1,8 @@
-package com.loki.qg.controller;
+package com.loki.gadflog.controller;
 
-import com.loki.qg.dto.DiscussionRequest;
-import com.loki.qg.dto.DiscussionResponse;
-import com.loki.qg.service.DiscussionService;
+import com.loki.gadflog.dto.DiscussionRequest;
+import com.loki.gadflog.dto.DiscussionResponse;
+import com.loki.gadflog.service.DiscussionService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

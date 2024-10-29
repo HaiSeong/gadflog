@@ -1,3 +1,5 @@
+'use client'
+
 import {Discussion} from '@/types';
 import {AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui/accordion";
 import {Button} from "@/components/ui/button";

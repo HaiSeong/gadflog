@@ -1,9 +1,9 @@
-package com.loki.qg.service;
+package com.loki.gadflog.service;
 
-import com.loki.qg.domain.Discussion;
-import com.loki.qg.dto.DiscussionRequest;
-import com.loki.qg.dto.DiscussionResponse;
-import com.loki.qg.repository.DiscussionRepository;
+import com.loki.gadflog.domain.Discussion;
+import com.loki.gadflog.dto.DiscussionRequest;
+import com.loki.gadflog.dto.DiscussionResponse;
+import com.loki.gadflog.repository.DiscussionRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

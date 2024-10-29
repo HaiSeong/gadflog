@@ -1,3 +1,5 @@
+'use client'
+
 import {useState} from 'react';
 import {submitDiscussion} from '@/api/discussions';
 import {Label} from "@/components/ui/label";

@@ -1,5 +1,6 @@
-// components/discussion/DiscussionEditDialog.tsx
-import {Dialog, DialogContent, DialogHeader, DialogTitle} from "@/components/ui/dialog";
+'use client'
+
+import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog";
 import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 
@@ -19,6 +20,9 @@ export const DiscussionEditDialog: React.FC<DiscussionEditDialogProps> = (
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>질문 수정하기</DialogTitle>
+                    <DialogDescription>
+                        아래 입력창에서 질문 내용을 수정할 수 있습니다.
+                    </DialogDescription>
                 </DialogHeader>
                 <div className="py-4">
                     <Textarea

@@ -1,13 +1,13 @@
-package com.loki.qg;
+package com.loki.gadflog;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class QuestionGraphApplicationTests {
+class GadflogApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }

@@ -1,3 +1,5 @@
+'use client'
+
 import {useEffect, useState} from 'react';
 import {Discussion} from '@/types';
 import {getDiscussions} from '@/api/discussions';

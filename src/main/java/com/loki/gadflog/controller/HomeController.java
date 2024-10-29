@@ -1,4 +1,4 @@
-package com.loki.qg.controller;
+package com.loki.gadflog.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,6 +1,6 @@
-package com.loki.qg.dto;
+package com.loki.gadflog.dto;
 
-import com.loki.qg.domain.Discussion;
+import com.loki.gadflog.domain.Discussion;
 
 public record DiscussionRequest(String content) {
     public Discussion toDiscussion() {

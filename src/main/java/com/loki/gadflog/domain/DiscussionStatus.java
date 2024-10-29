@@ -1,4 +1,4 @@
-package com.loki.qg.domain;
+package com.loki.gadflog.domain;
 
 public enum DiscussionStatus {
 

@@ -30,15 +30,17 @@ export default function DiscussionListItem({discussion, isOpen}: DiscussionListI
             </AccordionTrigger>
             <AccordionContent>
                 <div className="pt-4 pb-2 space-y-4">
-                    <div className="space-y-2">
+                    <div className="space-y-2 flex justify-start pt-2">
                         <h2 className="text-xl font-semibold text-gray-900">
                             {discussion.title}
                         </h2>
-                        <p className="text-gray-800 whitespace-pre-wrap">
-                            {discussion.content}
-                        </p>
                     </div>
-                    <div className="flex justify-end pt-2">
+                    <div className="flex justify-between pt-2">
+                        <p className="text-gray-800 whitespace-pre-wrap pr-1">
+                            {discussion.content.length > 50
+                                ? `${discussion.content.slice(0, 50)}...`
+                                : discussion.content}
+                        </p>
                         <Button
                             onClick={() => router.push(`/discussions/${discussion.id}`)}
                             variant="ghost"

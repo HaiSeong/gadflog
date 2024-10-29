@@ -88,3 +88,30 @@
         @apply bg-background text-foreground;
     }
 }
+
+
+.slide-in-transition {
+    animation: slideIn 0.3s;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.slide-out-transition {
+    animation: slideOut 0.3s;
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}

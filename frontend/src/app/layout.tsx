@@ -13,13 +13,13 @@ export default function RootLayout({children,}: {
         <div className="min-h-screen">
             <header className="sticky top-0 bg-white">
                 <div className="grid grid-cols-10 gap-5">
-                    <div className="col-start-4 col-span-4 p-4">
+                    <div className="col-start-4 col-span-4 pt-4 pb-4">
                         <h1 className="text-3xl font-bold">GADFLOG</h1>
                     </div>
                 </div>
             </header>
             <main className="grid grid-cols-10 gap-5">
-                <div className="col-start-4 col-span-4 py-4">
+                <div className="col-start-4 col-span-4">
                     {children}
                 </div>
             </main>

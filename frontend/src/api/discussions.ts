@@ -15,6 +15,26 @@ export const getDiscussions = async (): Promise<Discussion[]> => {
     return response.json();
 };
 
+export const getDiscussionById = async (id: number): Promise<Discussion | null> => {
+    try {
+        const response = await fetch(`${process.env.API_BASE_URL}/discussions/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            return null;
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching discussion:', error);
+        return null;
+    }
+};
+
 export const submitDiscussion = async (request: DiscussionRequest): Promise<Discussion> => {
     const response = await fetch(`${process.env.API_BASE_URL}/discussions`, {
         method: 'POST',

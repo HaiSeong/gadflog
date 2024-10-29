@@ -23,26 +23,6 @@ repositories {
     mavenCentral()
 }
 
-tasks.register('buildFrontend', Exec) {
-    workingDir 'frontend'
-    def npmCommand = "which npm".execute().text.trim()
-    commandLine npmCommand, 'run', 'build'
-}
-
-tasks.register('copyFrontendBuild', Copy) {
-    dependsOn buildFrontend
-    from 'frontend/out'
-    into 'src/main/resources/static'
-}
-
-tasks.named('processResources') {
-    mustRunAfter copyFrontendBuild
-}
-
-bootJar {
-    dependsOn copyFrontendBuild
-}
-
 dependencies {
     compileOnly 'org.projectlombok:lombok'
 

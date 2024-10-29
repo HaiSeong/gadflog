@@ -25,13 +25,18 @@ export default function DiscussionDetailMenu({onEdit, onDelete, disabled}: Discu
             <DropdownMenuContent align="end" className="w-32">
                 <DropdownMenuItem
                     onClick={onEdit}
-                    className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                    className="text-gray-500 cursor-pointer transition-colors"
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#0369a1'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#6b7280'}
                 >
                     수정
                 </DropdownMenuItem>
                 <DropdownMenuItem
                     onClick={onDelete}
-                    className="text-red-500 hover:text-red-700 cursor-pointer"
+                    className="text-gray-500 cursor-pointer transition-colors"
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#b91c1c'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#6b7280'}
+
                 >
                     삭제
                 </DropdownMenuItem>

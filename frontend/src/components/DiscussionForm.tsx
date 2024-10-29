@@ -71,7 +71,6 @@ export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess})
 
     return (
         <div className="relative grid w-full gap-1.5">
-            <div className="h-4"/>
             <h2 className="text-xl font-semibold mb-4">질문하기</h2>
             <div className={`transition-all duration-300 ease-in-out ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
                 <DiscussionTitleInput

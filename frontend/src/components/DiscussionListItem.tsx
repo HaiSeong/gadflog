@@ -46,7 +46,7 @@ export default function DiscussionListItem({discussion, isOpen}: DiscussionListI
                             variant="ghost"
                             className="flex items-center space-x-1 text-gray-600 hover:text-gray-900"
                         >
-                            <span>더보기</span>
+                            <span>자세히</span>
                             <ArrowRight className="w-4 h-4 ml-1"/>
                         </Button>
                     </div>

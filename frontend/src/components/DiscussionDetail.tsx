@@ -1,6 +1,6 @@
 'use client'
 
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useParams, useRouter} from 'next/navigation';
 import {Discussion} from '@/types';
 import {Button} from '@/components/ui/button';
@@ -8,11 +8,11 @@ import {deleteDiscussion, getDiscussionById, updateDiscussion} from '@/api/discu
 import {toast} from "@/hooks/use-toast";
 import {DiscussionEditDialog} from '@/components/DiscussionEditDialog';
 import {DiscussionDeleteAlert} from '@/components/DiscussionDeleteAlert';
-import {ChevronLeftIcon} from "@radix-ui/react-icons";
 import DiscussionDetailMenu from './DiscussionDetailMenu';
 import {Separator} from "@/components/ui/separator";
 import {UserHoverCard} from './UserHoverCard';
 import {DateInfo} from './DateInfo';
+import {ArrowLeft} from "lucide-react";
 
 export default function DiscussionDetail() {
     const params = useParams();
@@ -103,13 +103,16 @@ export default function DiscussionDetail() {
     return (
         <div className={`max-w-4xl mx-auto ${isLeaving ? 'slide-out-transition' : 'slide-in-transition'}`}>
             <div className="pb-4 flex justify-between">
+
                 <Button
                     variant="ghost"
-                    size="icon"
                     onClick={handleBack}
+                    className="flex items-center text-gray-600 hover:text-gray-900"
                 >
-                    <ChevronLeftIcon className="h-4 w-4"/>
+                    <ArrowLeft size="icon"/>
+                    <span>이전</span>
                 </Button>
+
                 <DiscussionDetailMenu
                     onEdit={() => setEditDialog({
                         isOpen: true,

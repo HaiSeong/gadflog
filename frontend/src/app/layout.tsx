@@ -20,6 +20,7 @@ export default function RootLayout({children,}: {
                         </Link>
                     </div>
                 </div>
+                <div className="h-4"/>
             </header>
             <main className="grid grid-cols-10 gap-5">
                 <div className="col-start-4 col-span-4">

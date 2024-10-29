@@ -11,7 +11,7 @@ export default function RootLayout({children,}: {
         <html lang="en">
         <body className={inter.className}>
         <div className="min-h-screen">
-            <header className="sticky top-0 bg-white opacity-100">
+            <header className="sticky top-0 bg-white z-50 opacity-100">
                 <div className="grid grid-cols-10 gap-5">
                     <div className="col-start-4 col-span-4 pt-4 pb-4">
                         <h1 className="text-3xl font-bold">GADFLOG</h1>

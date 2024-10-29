@@ -28,6 +28,11 @@ public class DiscussionController {
         return discussionService.getDiscussions();
     }
 
+    @GetMapping("/{id}")
+    public DiscussionResponse getDiscussion(@PathVariable Long id) {
+        return discussionService.getDiscussion(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public DiscussionResponse createDiscussion(@RequestBody DiscussionRequest discussionRequest) {

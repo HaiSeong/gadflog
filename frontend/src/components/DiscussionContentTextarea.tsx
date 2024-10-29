@@ -52,7 +52,7 @@ export function DiscussionContentTextarea({
     };
 
     return (
-        <div className="grid gap-1.5">
+        <div className="grid gap-1.5 p-1">
             <div className="flex justify-between items-center">
                 <Label htmlFor="content">내용</Label>
                 {showCount && (

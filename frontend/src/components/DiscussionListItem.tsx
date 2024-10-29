@@ -14,6 +14,18 @@ interface DiscussionListItemProps {
 export default function DiscussionListItem({discussion, isOpen}: DiscussionListItemProps) {
     const router = useRouter();
 
+    const sliceContent = (content: string) => {
+        const firstLineBreak = content.indexOf('\n');
+
+        if (firstLineBreak !== -1 && firstLineBreak < 50) {
+            return content.slice(0, firstLineBreak) + '...';
+        }
+
+        return content.length > 50
+            ? content.slice(0, 50) + '...'
+            : content;
+    };
+
     return (
         <AccordionItem
             value={String(discussion.id)}
@@ -37,9 +49,7 @@ export default function DiscussionListItem({discussion, isOpen}: DiscussionListI
                     </div>
                     <div className="flex justify-between pt-2">
                         <p className="text-gray-800 whitespace-pre-wrap pr-1">
-                            {discussion.content.length > 50
-                                ? `${discussion.content.slice(0, 50)}...`
-                                : discussion.content}
+                            {sliceContent(discussion.content)}
                         </p>
                         <Button
                             onClick={() => router.push(`/discussions/${discussion.id}`)}

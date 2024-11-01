@@ -3,7 +3,9 @@ package com.loki.gadflog.service;
 import com.loki.gadflog.domain.Discussion;
 import com.loki.gadflog.dto.DiscussionRequest;
 import com.loki.gadflog.dto.DiscussionResponse;
+import com.loki.gadflog.dto.RelationResponse;
 import com.loki.gadflog.repository.DiscussionRepository;
+import com.loki.gadflog.repository.RelationRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class DiscussionService {
 
     private final DiscussionRepository discussionRepository;
+    private final RelationRepository relationRepository;
 
     @Transactional(readOnly = true)
     public List<DiscussionResponse> getDiscussions() {
@@ -54,5 +57,19 @@ public class DiscussionService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 디스커션 입니다."));
 
         discussion.delete();
+    }
+
+    @Transactional(readOnly = true)
+    public List<RelationResponse> getSourceRelations(Long discussionId) {
+        return relationRepository.findAllBySourceId(discussionId).stream()
+                .map(RelationResponse::from)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<RelationResponse> getTargetRelations(Long discussionId) {
+        return relationRepository.findAllByTargetId(discussionId).stream()
+                .map(RelationResponse::from)
+                .toList();
     }
 }

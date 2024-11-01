@@ -11,7 +11,9 @@ const nextConfig = {
     },
     experimental: {
         appDir: true,
-    }
+    },
+    transpilePackages: ['@xyflow/react'],
+    reactStrictMode: true,
 }
 
 module.exports = nextConfig

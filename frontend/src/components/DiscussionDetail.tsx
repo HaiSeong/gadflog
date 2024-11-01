@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, {useEffect, useState} from 'react';
 import {useParams, useRouter} from 'next/navigation';
@@ -13,6 +13,7 @@ import {Separator} from "@/components/ui/separator";
 import {UserHoverCard} from './UserHoverCard';
 import {DateInfo} from './DateInfo';
 import {ArrowLeft} from "lucide-react";
+import RelatedDiscussionsFlow from "@/components/RelatedDiscussionsFlow";
 
 export default function DiscussionDetail() {
     const params = useParams();
@@ -34,6 +35,7 @@ export default function DiscussionDetail() {
                 setDiscussion(data);
             }
         };
+
         fetchDiscussion();
     }, [params.id]);
 
@@ -103,13 +105,12 @@ export default function DiscussionDetail() {
     return (
         <div className={`max-w-4xl mx-auto ${isLeaving ? 'slide-out-transition' : 'slide-in-transition'}`}>
             <div className="pb-4 flex justify-between">
-
                 <Button
                     variant="ghost"
                     onClick={handleBack}
                     className="flex items-center text-gray-600 hover:text-gray-900"
                 >
-                    <ArrowLeft size="icon"/>
+                    <ArrowLeft className="w-4 h-4 mr-2"/>
                     <span>이전</span>
                 </Button>
 
@@ -123,6 +124,7 @@ export default function DiscussionDetail() {
                     disabled={isLoading}
                 />
             </div>
+
             <div className="rounded-lg">
                 <div className="flex items-center space-x-2 text-sm text-gray-500 pb-4">
                     <UserHoverCard
@@ -136,12 +138,21 @@ export default function DiscussionDetail() {
                         updatedAt={discussion.updatedAt}
                     />
                 </div>
+
                 <h1 className="text-3xl font-bold text-gray-900 mb-4">
                     {discussion.title}
                 </h1>
-                <p className="text-lg text-gray-800 whitespace-pre-wrap">
+
+                <p className="text-lg text-gray-800 whitespace-pre-wrap mb-8">
                     {discussion.content}
                 </p>
+
+                <div className="mt-12">
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-xl font-semibold text-gray-900">관련된 질문들</h2>
+                    </div>
+                    <RelatedDiscussionsFlow currentDiscussion={discussion}/>
+                </div>
             </div>
 
             <DiscussionEditDialog

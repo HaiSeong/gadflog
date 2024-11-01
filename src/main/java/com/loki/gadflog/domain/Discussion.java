@@ -14,6 +14,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -22,6 +24,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EntityListeners(AuditingEntityListener.class)
+@SQLRestriction("status = 'ACTIVE'")
+@SQLDelete(sql = "UPDATE discussion SET status = 'DELETED' WHERE id = ?")
 @Getter
 public class Discussion {
 
@@ -51,14 +55,5 @@ public class Discussion {
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
-    }
-
-    public void delete() {
-        status = DiscussionStatus.DELETED;
-    }
-
-    @JsonProperty("active")
-    public boolean isActive() {
-        return status == DiscussionStatus.ACTIVE;
     }
 }

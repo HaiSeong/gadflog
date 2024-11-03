@@ -1,7 +1,7 @@
 import {Button} from "@/components/ui/button";
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,} from "@/components/ui/dialog";
-import {DiscussionContentTextarea} from "@/components/DiscussionContentTextarea";
-import {DiscussionTitleInput} from "@/components/DiscussionTitleInput";
+import {ContentTextarea} from "@/components/discussions/form/ContentTextarea";
+import {TitleInput} from "@/components/discussions/form/TitleInput";
 
 interface DiscussionEditDialogProps {
     isOpen: boolean;
@@ -14,9 +14,9 @@ interface DiscussionEditDialogProps {
     onSubmit: () => void;
 }
 
-export function DiscussionEditDialog({
-                                         isOpen, title, content, isLoading, onClose, onChangeTitle, onChangeContent, onSubmit
-                                     }: DiscussionEditDialogProps) {
+export function EditDialog({
+                               isOpen, title, content, isLoading, onClose, onChangeTitle, onChangeContent, onSubmit
+                           }: DiscussionEditDialogProps) {
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-[425px]">
@@ -24,11 +24,11 @@ export function DiscussionEditDialog({
                     <DialogTitle>질문 수정</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                    <DiscussionTitleInput
+                    <TitleInput
                         value={title}
                         onChange={onChangeTitle}
                     />
-                    <DiscussionContentTextarea
+                    <ContentTextarea
                         value={content}
                         onChange={onChangeContent}
                         minHeight={200}

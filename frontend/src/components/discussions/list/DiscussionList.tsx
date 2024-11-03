@@ -3,7 +3,7 @@
 import {Discussion} from '@/types';
 import {Accordion} from "@/components/ui/accordion";
 import {useState} from 'react';
-import DiscussionListItem from '@/components/DiscussionListItem';
+import DiscussionListItem from '@/components/discussions/list/DiscussionListItem';
 
 interface DiscussionListProps {
     discussions: Discussion[];

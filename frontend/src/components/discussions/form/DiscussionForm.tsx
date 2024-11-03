@@ -2,11 +2,11 @@
 
 import {useState} from 'react';
 import {Button} from "@/components/ui/button";
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import {toast} from "@/hooks/use-toast";
-import {submitDiscussion} from "@/api/discussions";
-import {DiscussionTitleInput} from "@/components/DiscussionTitleInput";
-import {DiscussionContentTextarea} from "@/components/DiscussionContentTextarea";
+import {createDiscussion} from "@/api/discussions";
+import {TitleInput} from "@/components/discussions/form/TitleInput";
+import {ContentTextarea} from "@/components/discussions/form/ContentTextarea";
 
 interface DiscussionFormProps {
     onSubmitSuccess: () => void;
@@ -45,7 +45,7 @@ export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess})
         }
 
         try {
-            await submitDiscussion(request);
+            await createDiscussion(request);
             toast({
                 title: "질문 등록 완료",
                 description: "질문이 성공적으로 등록되었습니다.",
@@ -73,7 +73,7 @@ export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess})
         <div className="relative grid w-full gap-1.5">
             <h2 className="text-xl font-semibold mb-4">질문하기</h2>
             <div className={`transition-all duration-300 ease-in-out ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
-                <DiscussionTitleInput
+                <TitleInput
                     value={formData.title}
                     onChange={(title) => setFormData(prev => ({...prev, title}))}
                     onClick={() => setIsExpanded(true)}
@@ -82,7 +82,7 @@ export const DiscussionForm: React.FC<DiscussionFormProps> = ({onSubmitSuccess})
                 <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
                     isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
                 }`}>
-                    <DiscussionContentTextarea
+                    <ContentTextarea
                         value={formData.content}
                         onChange={(content) => setFormData(prev => ({...prev, content}))}
                     />

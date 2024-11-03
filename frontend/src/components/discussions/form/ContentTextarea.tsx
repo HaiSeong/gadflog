@@ -11,14 +11,14 @@ interface DiscussionContentTextareaProps {
     className?: string;
 }
 
-export function DiscussionContentTextarea({
-                                              value,
-                                              onChange,
-                                              showCount = true,
-                                              minHeight = 120,
-                                              maxHeight = 400,
-                                              className = ""
-                                          }: DiscussionContentTextareaProps) {
+export function ContentTextarea({
+                                    value,
+                                    onChange,
+                                    showCount = true,
+                                    minHeight = 120,
+                                    maxHeight = 400,
+                                    className = ""
+                                }: DiscussionContentTextareaProps) {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const adjustHeight = () => {

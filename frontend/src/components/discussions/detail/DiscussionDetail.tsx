@@ -6,14 +6,14 @@ import {Discussion} from '@/types';
 import {Button} from '@/components/ui/button';
 import {deleteDiscussion, getDiscussionById, updateDiscussion} from '@/api/discussions';
 import {toast} from "@/hooks/use-toast";
-import {DiscussionEditDialog} from '@/components/DiscussionEditDialog';
-import {DiscussionDeleteAlert} from '@/components/DiscussionDeleteAlert';
+import {EditDialog} from '@/components/discussions/dialog/EditDialog';
+import {DeleteAlert} from '@/components/discussions/dialog/DeleteAlert';
 import DiscussionDetailMenu from './DiscussionDetailMenu';
 import {Separator} from "@/components/ui/separator";
-import {UserHoverCard} from './UserHoverCard';
-import {DateInfo} from './DateInfo';
+import {UserHoverCard} from '../../common/UserHoverCard';
+import {DateInfo} from '../../common/DateInfo';
 import {ArrowLeft} from "lucide-react";
-import RelatedDiscussionsFlow from "@/components/RelatedDiscussionsFlow";
+import RelatedDiscussionsFlow from "@/components/discussions/flow/RelatedDiscussionsFlow";
 
 export default function DiscussionDetail() {
     const params = useParams();
@@ -155,7 +155,7 @@ export default function DiscussionDetail() {
                 </div>
             </div>
 
-            <DiscussionEditDialog
+            <EditDialog
                 isOpen={editDialog.isOpen}
                 title={editDialog.title}
                 content={editDialog.content}
@@ -166,7 +166,7 @@ export default function DiscussionDetail() {
                 onSubmit={handleEdit}
             />
 
-            <DiscussionDeleteAlert
+            <DeleteAlert
                 isOpen={deleteAlert.isOpen}
                 isLoading={isLoading}
                 onClose={() => setDeleteAlert({isOpen: false})}

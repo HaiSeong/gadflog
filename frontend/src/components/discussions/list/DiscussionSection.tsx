@@ -4,8 +4,8 @@ import {useEffect, useState} from 'react';
 import {Discussion} from '@/types';
 import {getDiscussions} from '@/api/discussions';
 import {toast} from "@/hooks/use-toast";
-import {DiscussionForm} from '@/components/DiscussionForm';
-import DiscussionList from "@/components/DiscussionList";
+import {DiscussionForm} from '@/components/discussions/form/DiscussionForm';
+import DiscussionList from "@/components/discussions/list/DiscussionList";
 
 export const DiscussionSection: React.FC = () => {
     const [discussions, setDiscussions] = useState<Discussion[]>([]);

@@ -1,7 +1,7 @@
 import {Button} from "@/components/ui/button";
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,} from "@/components/ui/dialog";
-import {DiscussionContentTextarea} from "@/components/DiscussionContentTextarea";
-import {DiscussionTitleInput} from "@/components/DiscussionTitleInput";
+import {ContentTextarea} from "@/components/discussions/form/ContentTextarea";
+import {TitleInput} from "@/components/discussions/form/TitleInput";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {RelationType} from "@/types";
 
@@ -52,11 +52,11 @@ export function AddRelationDialog({
                             </SelectContent>
                         </Select>
                     </div>
-                    <DiscussionTitleInput
+                    <TitleInput
                         value={title}
                         onChange={onChangeTitle}
                     />
-                    <DiscussionContentTextarea
+                    <ContentTextarea
                         value={content}
                         onChange={onChangeContent}
                         minHeight={200}

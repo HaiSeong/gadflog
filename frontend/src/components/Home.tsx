@@ -1,4 +1,4 @@
-import {DiscussionSection} from "@/components/DiscussionSection";
+import {DiscussionSection} from "@/components/discussions/list/DiscussionSection";
 
 export const Home: React.FC = () => {
     return (

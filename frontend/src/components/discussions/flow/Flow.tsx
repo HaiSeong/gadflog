@@ -3,11 +3,12 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {ConnectionMode, Edge, Node, ReactFlow, useReactFlow} from '@xyflow/react';
 import {useRouter} from 'next/navigation';
-import {AddRelationDialog} from "@/components/AddRelationDialog";
+import {AddRelationDialog} from "@/components/discussions/dialog/AddRelationDialog";
 import {Relation, RelationType} from "@/types";
-import {DiscussionRelationships, RelatedDiscussionsFlowProps} from './types';
+import {RelatedDiscussionsFlowProps} from './types';
 import {debounce, getEdgeStyle} from './utils';
 import {nodeTypes} from './CustomNode';
+import {createDiscussion, getDiscussionById, getDiscussionRelations} from "@/api/discussions";
 
 const Flow = ({currentDiscussion}: RelatedDiscussionsFlowProps) => {
     const router = useRouter();
@@ -54,24 +55,12 @@ const Flow = ({currentDiscussion}: RelatedDiscussionsFlowProps) => {
     const handleSubmitNewRelation = async () => {
         try {
             setIsLoading(true);
-            const response = await fetch(`${process.env.API_BASE_URL}/discussions`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    title: dialogTitle,
-                    content: dialogContent,
-                    parentId: selectedParentId,
-                    type: dialogType,
-                }),
+            const newDiscussion = await createDiscussion({
+                title: dialogTitle,
+                content: dialogContent,
+                parentId: selectedParentId,
+                type: dialogType,
             });
-
-            if (!response.ok) {
-                throw new Error('Failed to create discussion');
-            }
-
-            const newDiscussion = await response.json();
 
             // Close dialog and reset states
             setIsDialogOpen(false);
@@ -94,13 +83,7 @@ const Flow = ({currentDiscussion}: RelatedDiscussionsFlowProps) => {
 
     const calculateLayout = useCallback(async () => {
         try {
-            const response = await fetch(`${process.env.API_BASE_URL}/discussions/${currentDiscussion.id}/relations`);
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch relations');
-            }
-
-            const relationships: DiscussionRelationships = await response.json();
+            const relationships = await getDiscussionRelations(currentDiscussion.id);
             const HORIZONTAL_SPACING = 220;
             const VERTICAL_SPACING = 150;
 
@@ -119,18 +102,16 @@ const Flow = ({currentDiscussion}: RelatedDiscussionsFlowProps) => {
                 }
             ];
 
-            const fetchDiscussion = async (id: number) => {
-                const response = await fetch(`${process.env.API_BASE_URL}/discussions/${id}`);
-                return response.json();
-            };
-
             // Process parents (above current node)
             const parentIds = relationships.parents.map(r => r.sourceId);
-            const parentDiscussions = await Promise.all(parentIds.map(fetchDiscussion));
+            const parentDiscussions = await Promise.all(
+                parentIds.map(id => getDiscussionById(id))
+            );
 
             if (parentDiscussions.length > 0) {
                 const startX = -(HORIZONTAL_SPACING * (parentDiscussions.length - 1)) / 2;
                 parentDiscussions.forEach((discussion, index) => {
+                    if (!discussion) return; // Skip if discussion is null
                     const relation = relationships.parents[index];
                     newNodes.push({
                         id: discussion.id.toString(),
@@ -153,11 +134,14 @@ const Flow = ({currentDiscussion}: RelatedDiscussionsFlowProps) => {
 
             // Process children (below current node)
             const childIds = relationships.children.map(r => r.targetId);
-            const childDiscussions = await Promise.all(childIds.map(fetchDiscussion));
+            const childDiscussions = await Promise.all(
+                childIds.map(id => getDiscussionById(id))
+            );
 
             if (childDiscussions.length > 0) {
                 const startX = -(HORIZONTAL_SPACING * (childDiscussions.length - 1)) / 2;
                 childDiscussions.forEach((discussion, index) => {
+                    if (!discussion) return; // Skip if discussion is null
                     const relation = relationships.children[index];
                     newNodes.push({
                         id: discussion.id.toString(),
@@ -226,6 +210,7 @@ const Flow = ({currentDiscussion}: RelatedDiscussionsFlowProps) => {
             console.error('Error calculating layout:', error);
         }
     }, [currentDiscussion.id, currentDiscussion.title, currentDiscussion.content, fitView]);
+
     useEffect(() => {
         calculateLayout();
     }, [calculateLayout]);

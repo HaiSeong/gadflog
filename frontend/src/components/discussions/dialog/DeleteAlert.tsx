@@ -18,7 +18,7 @@ interface DiscussionDeleteAlertProps {
     onConfirm: () => void;
 }
 
-export const DiscussionDeleteAlert: React.FC<DiscussionDeleteAlertProps> = (
+export const DeleteAlert: React.FC<DiscussionDeleteAlertProps> = (
     {isOpen, isLoading, onClose, onConfirm}) => {
     return (
         <AlertDialog open={isOpen} onOpenChange={(open) => !open && onClose()}>

@@ -4,7 +4,7 @@ import React from 'react';
 import {ReactFlowProvider} from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import {Discussion} from '@/types';
-import Flow from "@/components/discussion-flow/Flow";
+import Flow from "@/components/discussions/flow/Flow";
 
 interface RelatedDiscussionsFlowProps {
     currentDiscussion: Discussion;

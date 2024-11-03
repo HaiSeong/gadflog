@@ -6,9 +6,14 @@ export interface Discussion {
     updatedAt: Date;
 }
 
-export interface DiscussionRequest {
+export interface DiscussionBasicRequest {
     title: string;
     content: string;
+}
+
+export interface DiscussionRequest extends DiscussionBasicRequest {
+    parentId?: string;
+    type?: string;
 }
 
 export type RelationType = 'QUESTION' | 'OPINION';

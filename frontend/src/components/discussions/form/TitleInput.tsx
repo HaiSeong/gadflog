@@ -9,13 +9,13 @@ interface DiscussionTitleInputProps {
     className?: string;
 }
 
-export function DiscussionTitleInput({
-                                         value,
-                                         onChange,
-                                         onClick,
-                                         showCount = true,
-                                         className = ""
-                                     }: DiscussionTitleInputProps) {
+export function TitleInput({
+                               value,
+                               onChange,
+                               onClick,
+                               showCount = true,
+                               className = ""
+                           }: DiscussionTitleInputProps) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
         if (newValue.length <= 50) {

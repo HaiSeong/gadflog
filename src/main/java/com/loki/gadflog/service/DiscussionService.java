@@ -1,9 +1,10 @@
 package com.loki.gadflog.service;
 
 import com.loki.gadflog.domain.Discussion;
+import com.loki.gadflog.domain.Relation;
+import com.loki.gadflog.dto.DiscussionRelationshipResponse;
 import com.loki.gadflog.dto.DiscussionRequest;
 import com.loki.gadflog.dto.DiscussionResponse;
-import com.loki.gadflog.dto.RelationResponse;
 import com.loki.gadflog.repository.DiscussionRepository;
 import com.loki.gadflog.repository.RelationRepository;
 import java.util.List;
@@ -36,6 +37,14 @@ public class DiscussionService {
     public DiscussionResponse createDiscussion(DiscussionRequest discussionRequest) {
         Discussion discussion = discussionRepository.save(discussionRequest.toDiscussion());
 
+        if (discussionRequest.hasRelation()) {
+            Discussion parent = discussionRepository.findById(discussionRequest.parentId())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 부모 디스커션입니다."));
+
+            Relation relation = new Relation(parent, discussion, discussionRequest.type());
+            relationRepository.save(relation);
+        }
+
         return DiscussionResponse.from(discussion);
     }
 
@@ -55,16 +64,10 @@ public class DiscussionService {
     }
 
     @Transactional(readOnly = true)
-    public List<RelationResponse> getSourceRelations(Long discussionId) {
-        return relationRepository.findAllBySourceId(discussionId).stream()
-                .map(RelationResponse::from)
-                .toList();
-    }
+    public DiscussionRelationshipResponse getRelationship(Long discussionId) {
+        Discussion discussion = discussionRepository.findById(discussionId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 디스커션 입니다."));
 
-    @Transactional(readOnly = true)
-    public List<RelationResponse> getTargetRelations(Long discussionId) {
-        return relationRepository.findAllByTargetId(discussionId).stream()
-                .map(RelationResponse::from)
-                .toList();
+        return DiscussionRelationshipResponse.from(discussion);
     }
 }

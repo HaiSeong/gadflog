@@ -11,7 +11,7 @@ export interface DiscussionRequest {
     content: string;
 }
 
-export type RelationType = 'RELATED' | 'DUPLICATE' | 'SOLUTION';
+export type RelationType = 'QUESTION' | 'OPINION';
 
 export interface Relation {
     id: number;

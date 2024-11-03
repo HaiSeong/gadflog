@@ -5,6 +5,7 @@ import {AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui
 import {Button} from "@/components/ui/button";
 import {useRouter} from 'next/navigation';
 import {ArrowRight} from 'lucide-react';
+import {sliceContent} from "@/utils/string";
 
 interface DiscussionListItemProps {
     discussion: Discussion;
@@ -13,18 +14,6 @@ interface DiscussionListItemProps {
 
 export default function DiscussionListItem({discussion, isOpen}: DiscussionListItemProps) {
     const router = useRouter();
-
-    const sliceContent = (content: string) => {
-        const firstLineBreak = content.indexOf('\n');
-
-        if (firstLineBreak !== -1 && firstLineBreak < 50) {
-            return content.slice(0, firstLineBreak) + '...';
-        }
-
-        return content.length > 50
-            ? content.slice(0, 50) + '...'
-            : content;
-    };
 
     return (
         <AccordionItem
@@ -49,7 +38,7 @@ export default function DiscussionListItem({discussion, isOpen}: DiscussionListI
                     </div>
                     <div className="flex justify-between pt-2">
                         <p className="text-gray-800 whitespace-pre-wrap pr-1">
-                            {sliceContent(discussion.content)}
+                            {sliceContent(discussion.content, 50)}
                         </p>
                         <Button
                             onClick={() => router.push(`/discussions/${discussion.id}`)}

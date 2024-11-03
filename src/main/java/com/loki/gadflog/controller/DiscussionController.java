@@ -1,8 +1,8 @@
 package com.loki.gadflog.controller;
 
+import com.loki.gadflog.dto.DiscussionRelationshipResponse;
 import com.loki.gadflog.dto.DiscussionRequest;
 import com.loki.gadflog.dto.DiscussionResponse;
-import com.loki.gadflog.dto.RelationResponse;
 import com.loki.gadflog.service.DiscussionService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -53,13 +53,8 @@ public class DiscussionController {
         discussionService.deleteDiscussion(id);
     }
 
-    @GetMapping("/{id}/relations/source")
-    public List<RelationResponse> getSourceRelations(@PathVariable Long id) {
-        return discussionService.getSourceRelations(id);
-    }
-
-    @GetMapping("/{id}/relations/target")
-    public List<RelationResponse> getTargetRelations(@PathVariable Long id) {
-        return discussionService.getTargetRelations(id);
+    @GetMapping("/{id}/relations")
+    public DiscussionRelationshipResponse getRelationship(@PathVariable Long id) {
+        return discussionService.getRelationship(id);
     }
 }

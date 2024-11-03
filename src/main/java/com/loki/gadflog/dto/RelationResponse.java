@@ -14,8 +14,8 @@ public record RelationResponse(
     public static RelationResponse from(Relation relation) {
         return new RelationResponse(
                 relation.getId(),
-                relation.getSourceId(),
-                relation.getTargetId(),
+                relation.getParent().getId(),
+                relation.getChild().getId(),
                 relation.getType(),
                 relation.getCreatedAt()
         );

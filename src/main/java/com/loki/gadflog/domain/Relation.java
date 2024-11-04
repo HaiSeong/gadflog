@@ -51,6 +51,13 @@ public class Relation {
     private LocalDateTime createdAt;
 
     public Relation(Discussion parent, Discussion child, RelationType type) {
-        this(0L, parent, child, type, RelationStatus.ACTIVE, null);
+        this(null, parent, child, type, RelationStatus.ACTIVE, null);
+
+        if (parent != null && !parent.getChildren().contains(this)) {
+            parent.getChildren().add(this);
+        }
+        if (child != null && !child.getParents().contains(this)) {
+            child.getParents().add(this);
+        }
     }
 }

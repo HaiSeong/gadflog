@@ -30,19 +30,24 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 public class Discussion {
 
-    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Relation> parents = new ArrayList<>();
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Relation> children = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false, length = 50)
     private String title;
+
     @Column(nullable = false, length = 2000)
     private String content;
+
     @Enumerated(EnumType.STRING)
     private DiscussionStatus status;
+
+    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Relation> parents = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Relation> children = new ArrayList<>();
 
     @CreatedDate
     private LocalDateTime createdAt;

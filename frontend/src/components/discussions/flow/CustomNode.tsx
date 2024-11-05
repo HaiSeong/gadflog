@@ -80,7 +80,7 @@ const CustomNode = ({data}: { data: CustomNodeData }) => {
                 }}
             >
                 <p className="text-m font-medium text-gray-900">
-                    {data.title}
+                    {sliceContent(data.title, 24)}
                 </p>
                 {isHovered && (
                     <div className="mt-2 text-sm space-y-2">

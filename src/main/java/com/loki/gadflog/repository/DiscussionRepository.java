@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DiscussionRepository extends JpaRepository<Discussion, Long> {
     List<Discussion> findAllByOrderByCreatedAtDesc();
+
+    List<Discussion> findAllByCollectionId(Long id);
 }

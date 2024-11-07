@@ -1,7 +1,7 @@
 package com.loki.gadflog.dto;
 
 import com.loki.gadflog.domain.Discussion;
-import com.loki.gadflog.domain.RelationType;
+import com.loki.gadflog.domain.DiscussionType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -14,15 +14,15 @@ public record DiscussionRequest(
         @Size(min = 1, max = 2000, message = "내용은 1-2000자 사이여야 합니다")
         String content,
 
-        RelationType type,
+        DiscussionType type,
 
         Long parentId
 ) {
     public Discussion toDiscussion() {
-        return new Discussion(title, content);
+        return new Discussion(title, content, type);
     }
 
     public boolean hasRelation() {
-        return type != null;
+        return parentId != null;
     }
 }

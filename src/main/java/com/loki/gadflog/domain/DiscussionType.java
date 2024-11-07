@@ -1,6 +1,6 @@
 package com.loki.gadflog.domain;
 
-public enum RelationType {
+public enum DiscussionType {
 
     OPINION, QUESTION
 }

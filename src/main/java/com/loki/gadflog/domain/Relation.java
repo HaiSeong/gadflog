@@ -41,8 +41,9 @@ public class Relation {
     @JoinColumn(name = "child_id")
     private Discussion child;
 
-    @Enumerated(EnumType.STRING)
-    private RelationType type;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "collection_id")
+    private Collection collection;
 
     @Enumerated(EnumType.STRING)
     private RelationStatus status;
@@ -50,14 +51,7 @@ public class Relation {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    public Relation(Discussion parent, Discussion child, RelationType type) {
-        this(null, parent, child, type, RelationStatus.ACTIVE, null);
-
-        if (parent != null && !parent.getChildren().contains(this)) {
-            parent.getChildren().add(this);
-        }
-        if (child != null && !child.getParents().contains(this)) {
-            child.getParents().add(this);
-        }
+    public Relation(Discussion parent, Discussion child, Collection collection) {
+        this(null, parent, child, collection, RelationStatus.ACTIVE, null);
     }
 }

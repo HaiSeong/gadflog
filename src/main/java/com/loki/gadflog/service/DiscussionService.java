@@ -2,7 +2,6 @@ package com.loki.gadflog.service;
 
 import com.loki.gadflog.domain.Discussion;
 import com.loki.gadflog.domain.Relation;
-import com.loki.gadflog.dto.DiscussionRelationshipResponse;
 import com.loki.gadflog.dto.DiscussionRequest;
 import com.loki.gadflog.dto.DiscussionResponse;
 import com.loki.gadflog.repository.DiscussionRepository;
@@ -41,7 +40,7 @@ public class DiscussionService {
             Discussion parent = discussionRepository.findById(discussionRequest.parentId())
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 부모 디스커션입니다."));
 
-            Relation relation = new Relation(parent, discussion, discussionRequest.type());
+            Relation relation = new Relation(parent, discussion, parent.getCollection());
             relationRepository.save(relation);
         }
 
@@ -53,7 +52,7 @@ public class DiscussionService {
         Discussion discussion = discussionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 디스커션 입니다."));
 
-        discussion.update(discussionRequest.title(), discussionRequest.content());
+        discussion.update(discussionRequest.title(), discussionRequest.content(), discussionRequest.type());
 
         return DiscussionResponse.from(discussion);
     }
@@ -61,13 +60,5 @@ public class DiscussionService {
     @Transactional
     public void deleteDiscussion(Long id) {
         discussionRepository.deleteById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public DiscussionRelationshipResponse getRelationship(Long discussionId) {
-        Discussion discussion = discussionRepository.findById(discussionId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 디스커션 입니다."));
-
-        return DiscussionRelationshipResponse.from(discussion);
     }
 }

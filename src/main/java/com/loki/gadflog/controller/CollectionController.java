@@ -6,7 +6,6 @@ import com.loki.gadflog.dto.DiscussionRequest;
 import com.loki.gadflog.dto.DiscussionResponse;
 import com.loki.gadflog.service.CollectionService;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +29,9 @@ public class CollectionController {
         return collectionService.createCollection(collectionRequest);
     }
 
-    @GetMapping("{id}/discussions")
-    public List<DiscussionResponse> getDiscussions(@PathVariable Long id) {
-        return collectionService.getDiscussions(id);
+    @GetMapping("{id}")
+    public CollectionResponse getCollection(@PathVariable Long id) {
+        return collectionService.getCollection(id);
     }
 
     @PostMapping("{id}/discussions")

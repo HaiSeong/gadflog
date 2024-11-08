@@ -16,6 +16,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
@@ -36,6 +37,10 @@ public class Collection {
 
     @Column(nullable = false, length = 50)
     private String title;
+
+    @Setter
+    @Column
+    private Long rootDiscussionId;
 
     @OneToMany(mappedBy = "collection", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Discussion> discussions = new ArrayList<>();

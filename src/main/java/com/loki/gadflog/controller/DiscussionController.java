@@ -4,7 +4,6 @@ import com.loki.gadflog.dto.DiscussionRequest;
 import com.loki.gadflog.dto.DiscussionResponse;
 import com.loki.gadflog.service.DiscussionService;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,11 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class DiscussionController {
 
     private final DiscussionService discussionService;
-
-    @GetMapping
-    public List<DiscussionResponse> getDiscussions() {
-        return discussionService.getDiscussions();
-    }
 
     @GetMapping("/{id}")
     public DiscussionResponse getDiscussion(@PathVariable Long id) {

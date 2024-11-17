@@ -1,13 +1,11 @@
 package com.loki.gadflog.service;
 
 import com.loki.gadflog.domain.Collection;
-import com.loki.gadflog.domain.Discussion;
 import com.loki.gadflog.dto.CollectionRequest;
 import com.loki.gadflog.dto.CollectionResponse;
-import com.loki.gadflog.dto.DiscussionRequest;
-import com.loki.gadflog.dto.DiscussionResponse;
 import com.loki.gadflog.repository.CollectionRepository;
 import com.loki.gadflog.repository.DiscussionRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,25 +25,17 @@ public class CollectionService {
     }
 
     @Transactional(readOnly = true)
+    public List<CollectionResponse> getCollections() {
+        return collectionRepository.findAll().stream()
+                .map(CollectionResponse::from)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public CollectionResponse getCollection(Long id) {
         Collection collection = collectionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 컬렉션입니다."));
 
         return CollectionResponse.from(collection);
-    }
-
-    @Transactional
-    public DiscussionResponse createDiscussion(Long id, DiscussionRequest discussionRequest) {
-        Collection collection = collectionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 컬렉션입니다."));
-
-        Discussion discussion = discussionRepository.save(discussionRequest.toDiscussion());
-        collection.addDiscussion(discussion);
-
-        if (collection.getDiscussions().size() == 1) {
-            collection.setRootDiscussionId(discussion.getId());
-        }
-
-        return DiscussionResponse.from(discussion);
     }
 }

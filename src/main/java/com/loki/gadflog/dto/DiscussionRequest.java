@@ -14,6 +14,8 @@ public record DiscussionRequest(
         @Size(min = 1, max = 2000, message = "내용은 1-2000자 사이여야 합니다")
         String content,
 
+        Long collectionId,
+
         DiscussionType type,
 
         Long parentId

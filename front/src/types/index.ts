@@ -1,8 +1,8 @@
-
 export type DiscussionType = 'QUESTION' | 'OPINION';
 
-export interface Discussion {
+export interface DiscussionResponse {
     id: number;
+    collectionId: number;
     title: string;
     content: string;
     type: DiscussionType;
@@ -10,19 +10,24 @@ export interface Discussion {
     updatedAt: string;
 }
 
-export interface Relation {
+export interface DiscussionTitleResponse {
+    id: number;
+    title: string;
+    type: 'OPINION' | 'QUESTION';
+}
+
+export interface RelationResponse {
     id: number;
     sourceId: number;
     targetId: number;
-    createdAt: string;
 }
 
-export interface Collection {
+export interface CollectionResponse {
     id: number;
     title: string;
     rootDiscussionId: number;
-    discussions: Discussion[];
-    relations: Relation[];
+    discussions: DiscussionTitleResponse[];
+    relations: RelationResponse[];
     createdAt: string;
     updatedAt: string;
 }
@@ -33,4 +38,9 @@ export interface CustomNodeData {
     content: string;
     isCurrent: boolean;
     type: DiscussionType;
+    collectionId: number;
+}
+
+export interface CreateDiscussionResponse extends DiscussionResponse {
+    relation?: RelationResponse;
 }

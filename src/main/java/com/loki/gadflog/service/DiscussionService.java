@@ -3,6 +3,7 @@ package com.loki.gadflog.service;
 import com.loki.gadflog.domain.Collection;
 import com.loki.gadflog.domain.Discussion;
 import com.loki.gadflog.domain.Relation;
+import com.loki.gadflog.dto.DiscussionCreateResponse;
 import com.loki.gadflog.dto.DiscussionRequest;
 import com.loki.gadflog.dto.DiscussionResponse;
 import com.loki.gadflog.repository.CollectionRepository;
@@ -28,7 +29,7 @@ public class DiscussionService {
     }
 
     @Transactional
-    public DiscussionResponse createDiscussion(DiscussionRequest discussionRequest) {
+    public DiscussionCreateResponse createDiscussion(DiscussionRequest discussionRequest) {
         Collection collection = collectionRepository.findById(discussionRequest.collectionId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 컬렉션입니다."));
 
@@ -45,9 +46,10 @@ public class DiscussionService {
 
             Relation relation = new Relation(parent, discussion, parent.getCollection());
             relationRepository.save(relation);
+            return DiscussionCreateResponse.of(discussion, relation);
         }
 
-        return DiscussionResponse.from(discussion);
+        return DiscussionCreateResponse.of(discussion, null);
     }
 
     @Transactional

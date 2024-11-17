@@ -1,27 +1,32 @@
 import React, { useState } from 'react';
 import {Handle, Position} from 'reactflow';
 import {Card, CardContent} from '@/components/ui/card';
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
-import type {CustomNodeData} from '@/types';
+import AddNodeDialog from '@/components/collection/AddNodeDialog';
+import { CustomNodeData, DiscussionResponse } from '@/types';
 import {Button} from '@/components/ui/button';
-import {PlusCircle} from 'lucide-react';
 
-interface NodeProps {
-    data: CustomNodeData;
-    onAddChild?: () => void;
+interface CustomNodeProps {
+    data: CustomNodeData & {
+        collectionId: number;
+        onAddNode: (discussion: DiscussionResponse) => void;
+        refreshCollection?: () => Promise<void>;
+    };
+    id: string;
 }
 
-const CustomNode: React.FC<NodeProps> = React.memo(({data, onAddChild}) => {
+const CustomNode: React.FC<CustomNodeProps> = React.memo(({ data, id }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const {title = '', isCurrent = false, type} = data;
+    const {title = '', isCurrent = false, type, collectionId} = data;
     const typeLabel = type === 'QUESTION' ? '질문' : type === 'OPINION' ? '의견' : '';
-    
+    const handleSuccess = async (newDiscussion: DiscussionResponse) => {
+        setIsDialogOpen(false);
+        if (data.onAddNode) {
+            data.onAddNode(newDiscussion);
+            // 새로운 노드로 이동 TODO: 변경필요
+            window.location.href = `/collections/${collectionId}?current=${id}`;
+        }
+    };
+
     return (
         <div className="relative">
             <Handle
@@ -45,25 +50,23 @@ const CustomNode: React.FC<NodeProps> = React.memo(({data, onAddChild}) => {
                 isConnectable={false}
             />
             {isCurrent && (
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                    <DialogTrigger asChild>
-                        <Button
-                            variant="ghost" 
-                            size="icon"
-                            className="absolute -bottom-3 left-[50%] translate-x-[-50%] w-4 h-6 rounded-full bg-purple-50 hover:bg-purple-100 hover:border-purple-600 transition-all duration-200 border-2 border-purple-600"
-                        >
-                            <span className="text-lg text-purple-500 hover:text-purple-600">+</span>
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>새로운 노드 추가</DialogTitle>
-                        </DialogHeader>
-                        <div className="py-4">
-                            {/* 노드 생성 폼 컴포넌트를 넣으세요 */}
-                        </div>
-                    </DialogContent>
-                </Dialog>
+                <>
+                    <Button
+                        variant="ghost" 
+                        size="icon"
+                        onClick={() => setIsDialogOpen(true)}
+                        className="absolute -bottom-3 left-[50%] translate-x-[-50%] w-4 h-6 rounded-full bg-purple-50 hover:bg-purple-100 hover:border-purple-600 transition-all duration-200 border-2 border-purple-600"
+                    >
+                        <span className="text-lg text-purple-500 hover:text-purple-600">+</span>
+                    </Button>
+                    <AddNodeDialog
+                        isOpen={isDialogOpen}
+                        onOpenChange={setIsDialogOpen}
+                        collectionId={collectionId}
+                        parentId={data.id}
+                        onSuccess={(newDiscussion) => handleSuccess(newDiscussion)}
+                    />
+                </>
             )}
         </div>
     );

@@ -1,5 +1,6 @@
 package com.loki.gadflog.controller;
 
+import com.loki.gadflog.dto.DiscussionCreateResponse;
 import com.loki.gadflog.dto.DiscussionRequest;
 import com.loki.gadflog.dto.DiscussionResponse;
 import com.loki.gadflog.service.DiscussionService;
@@ -30,7 +31,7 @@ public class DiscussionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public DiscussionResponse createDiscussion(@RequestBody @Valid DiscussionRequest discussionRequest) {
+    public DiscussionCreateResponse createDiscussion(@RequestBody @Valid DiscussionRequest discussionRequest) {
         return discussionService.createDiscussion(discussionRequest);
     }
 

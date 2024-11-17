@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import ReactFlow, {addEdge, Background, Connection, Edge, MarkerType, Node, ReactFlowInstance, Viewport,} from 'reactflow';
 import {useEdgesState, useNodesState} from '@reactflow/core';
-import {CustomNodeData, Discussion} from '@/types';
+import {CustomNodeData, DiscussionResponse} from '@/types';
 import CustomNode from './CustomNode';
 import 'reactflow/dist/style.css';
 
@@ -42,22 +42,27 @@ const nodeStyle = {
 };
 
 interface FlowProps {
-    discussions?: Discussion[];
+    collectionId: number;
+    discussions?: DiscussionResponse[];
     relations?: Array<{source: number; target: number}>; 
     rootDiscussionId: number;
     currentNodeId: number;
     onNodeClick: (nodeId: number) => void;
     readonly?: boolean;
+    onDiscussionAdded?: (discussion: DiscussionResponse) => void;
 }
 
 const Flow = ({
+    collectionId,
     discussions,
     relations = [],  // 기본값 빈 배열로 설정
     rootDiscussionId,
     currentNodeId,
     onNodeClick,
     readonly = false,
+    onDiscussionAdded,
 }: FlowProps) => {
+
     // nodes 초기화 시 rootDiscussionId를 기준으로 트리 구조 생성
     const initialNodes: Node<CustomNodeData>[] = discussions?.map((discussion) => {
         return {
@@ -69,7 +74,8 @@ const Flow = ({
                 title: discussion.title,
                 content: discussion.content,
                 isCurrent: discussion.id === currentNodeId,
-                type: discussion.type
+                type: discussion.type,
+                collectionId: collectionId
             },
             style: nodeStyle,
         };
@@ -103,6 +109,7 @@ const Flow = ({
         },
     };
 
+    console.log(nodes);
     // 화면 중앙 계산 함수
     const getCenter = useCallback(() => {
         if (!flowRef.current) return {x: 0, y: 0};
@@ -141,23 +148,51 @@ const Flow = ({
 
     // 노드 클릭 핸들러
     const handleNodeClick = useCallback((event: React.MouseEvent, clickedNode: Node) => {
-        onNodeClick(parseInt(clickedNode.id)); // string -> number로 변환
+        onNodeClick(parseInt(clickedNode.id));
         const center = getCenter();
 
         // 모든 노드의 current 상태를 업데이트하고 위치 계산
         const updatedNodes = nodes.map(node => {
-            const isCurrent = node.id === clickedNode.id;
-            return {
-                ...node,
-                data: {
-                    ...node.data,
-                    isCurrent
-                },
-                style: {
-                    ...nodeStyle,
-                    zIndex: isCurrent ? 1000 : 1,
-                    transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+    const isCurrent = node.id === clickedNode.id;
+    return {
+        ...node,
+        data: {
+            ...node.data,
+            isCurrent,
+            onAddNode: (newDiscussion: DiscussionResponse) => {
+                const newNode: Node<CustomNodeData> = {
+                    id: newDiscussion.id.toString(),
+                    type: 'custom',
+                    position: { x: center.x - 75, y: center.y + VERTICAL_SPACING },
+                    data: {
+                        id: newDiscussion.id,
+                        title: newDiscussion.title,
+                        content: newDiscussion.content,
+                        isCurrent: false,
+                        type: newDiscussion.type,
+                        collectionId: collectionId
+                    },
+                    style: nodeStyle,
+                };
+
+                setNodes(prev => [...prev, newNode]);
+                setEdges(prev => [...prev, createEdge(parseInt(clickedNode.id), newDiscussion.id)]);
+
+                if (onDiscussionAdded) {
+                    onDiscussionAdded(newDiscussion);
                 }
+
+                // 레이아웃 재조정을 위해 현재 노드 다시 클릭
+                setTimeout(() => {
+                    handleNodeClick({} as React.MouseEvent, clickedNode);
+                }, 100);
+            }
+        },
+        style: {
+            ...nodeStyle,
+            zIndex: isCurrent ? 1000 : 1,
+            transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+        }
             };
         });
 
@@ -270,19 +305,12 @@ const Flow = ({
                         x: center.x + FAR_DISTANCE + SIBLING_SPACING + (index * HORIZONTAL_SPACING),
                         y: center.y + VERTICAL_SPACING
                     };
-                } else if (grandChildren.includes(node.id)) {
-                    // 손자 노드들은 아래로 멀리
-                    const index = grandChildren.indexOf(node.id);
-                    position = {
-                        x: center.x - FAR_DISTANCE / 2 + (index * HORIZONTAL_SPACING),
-                        y: center.y + FAR_DISTANCE + VERTICAL_SPACING
-                    };
                 } else if (descendants.includes(node.id)) {
                     // 자손 노드들은 계층 깊이로 아래로
                     const index = descendants.indexOf(node.id);
                     position = {
-                        x: center.x,
-                        y: center.y + FAR_DISTANCE + 80,
+                        x: center.x - 75,
+                        y: center.y + FAR_DISTANCE,
                     };
                 } else if (elderParentSiblings.includes(node.id)) {
                     // 큰삼촌들은 왼쪽 끝으로
@@ -330,7 +358,7 @@ const Flow = ({
                 };
             });
         });
-    }, [nodes, getCenter, setNodes, onNodeClick]);
+    }, [nodes, getCenter, setNodes, setEdges, onNodeClick, onDiscussionAdded]);
 
     // useEffect로 currentNodeId 변경 감지
     useEffect(() => {
@@ -371,7 +399,6 @@ const Flow = ({
         [setEdges, readonly]
     );
 
-    // 화면 크기 변경 감지 및 처리
     useEffect(() => {
         const handleResize = () => {
             const currentNode = nodes.find(node => node.data.isCurrent);
@@ -389,12 +416,12 @@ const Flow = ({
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
-                onNodesChange={readonly ? undefined : onNodesChange}
-                onEdgesChange={readonly ? undefined : onEdgesChange}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
                 onConnect={handleConnect}
                 onNodeClick={handleNodeClick}
                 onInit={onInit}
-                nodeTypes={nodeTypes as any}
+                nodeTypes={nodeTypes}
                 defaultEdgeOptions={defaultEdgeOptions}
                 fitView={false}
                 minZoom={1}
